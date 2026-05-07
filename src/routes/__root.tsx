@@ -9,6 +9,7 @@ import {
 } from "@tanstack/react-router";
 
 import appCss from "../styles.css?url";
+import { Header, Footer, FloatingWhatsApp } from "@/components/SiteLayout";
 
 function NotFoundComponent() {
   return (
@@ -119,7 +120,12 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <Outlet />
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1"><Outlet /></main>
+        <Footer />
+        <FloatingWhatsApp />
+      </div>
     </QueryClientProvider>
   );
 }
