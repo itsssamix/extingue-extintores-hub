@@ -1,5 +1,5 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import { Instagram, Phone, MapPin, Flame } from "lucide-react";
+import { Instagram, Phone, MapPin } from "lucide-react";
 import logo from "@/assets/logo.png";
 
 const WHATSAPP =
