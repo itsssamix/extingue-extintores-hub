@@ -2,6 +2,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ShieldCheck, Award, Wrench, Users, Building2, ArrowRight, Flame, CheckCircle2 } from "lucide-react";
 import hero from "@/assets/hero.jpg";
 import about from "@/assets/about.jpg";
+import { CATALOGO } from "@/data/catalogo";
 
 const WHATSAPP =
   "https://api.whatsapp.com/send?phone=5516999998625&text=Ol%C3%A1!%20Como%20posso%20te%20ajudar%20?";
@@ -74,6 +75,49 @@ function Home() {
               </div>
               <h3 className="mt-5 font-display text-xl font-bold text-secondary">{title}</h3>
               <p className="mt-2 text-sm text-muted-foreground leading-relaxed">{desc}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* CATÁLOGO PREVIEW */}
+      <section className="bg-muted/50 py-20 overflow-hidden">
+        <div className="container mx-auto px-4 mb-12 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div>
+            <span className="text-xs font-semibold uppercase tracking-widest text-primary">Nossos Produtos</span>
+            <h2 className="mt-3 font-display text-4xl md:text-5xl font-bold text-secondary">
+              Catálogo de Produtos
+            </h2>
+            <p className="mt-3 text-muted-foreground">Arraste para os lados para ver os modelos de cada categoria.</p>
+          </div>
+          <Link to="/catalogo" className="inline-flex items-center gap-2 rounded-full bg-secondary px-6 py-3 font-semibold text-secondary-foreground hover:bg-secondary/90 transition-all shadow-[var(--shadow-card)] whitespace-nowrap">
+            Ver catálogo completo <ArrowRight className="h-4 w-4" />
+          </Link>
+        </div>
+
+        <div className="container mx-auto px-4 space-y-12">
+          {CATALOGO.map((categoria) => (
+            <div key={categoria.categoria}>
+              <h3 className="font-display text-2xl font-bold text-secondary mb-6 flex items-center gap-3">
+                {categoria.categoria}
+              </h3>
+              <div className="flex overflow-x-auto gap-6 pb-6 snap-x snap-mandatory scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
+                {categoria.itens.map((item) => (
+                  <div key={item.id} className="min-w-[280px] md:min-w-[320px] snap-start bg-card rounded-2xl p-4 shadow-[var(--shadow-card)] border border-border group hover:-translate-y-1 transition-all">
+                    <div className="aspect-square rounded-xl bg-muted/30 overflow-hidden mb-4 relative">
+                      {/* Image fallback/placeholder since we don't have the actual images in the public dir yet */}
+                      <div className="absolute inset-0 flex items-center justify-center text-muted-foreground bg-secondary/5">
+                        <span className="text-xs font-medium uppercase tracking-wider">Imagem ilustrativa</span>
+                      </div>
+                      <img src={item.imagem} alt={item.nome} className="w-full h-full object-cover relative z-10 opacity-0 transition-opacity duration-300" onLoad={(e) => (e.currentTarget.style.opacity = '1')} onError={(e) => (e.currentTarget.style.display = 'none')} loading="lazy" />
+                    </div>
+                    <h4 className="font-semibold text-secondary text-lg group-hover:text-primary transition-colors">{item.nome}</h4>
+                    <a href={`${WHATSAPP}&text=Ol%C3%A1!%20Gostaria%20de%20saber%20mais%20sobre%20o%20produto:%20${item.nome}`} target="_blank" rel="noopener noreferrer" className="mt-4 text-sm font-semibold text-primary flex items-center gap-1 hover:gap-2 transition-all">
+                      Consultar preço <ArrowRight className="h-3 w-3" />
+                    </a>
+                  </div>
+                ))}
+              </div>
             </div>
           ))}
         </div>
