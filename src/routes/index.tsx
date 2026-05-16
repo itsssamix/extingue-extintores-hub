@@ -96,7 +96,9 @@ function Home() {
         </div>
 
         <div className="container mx-auto px-4 space-y-12">
-          {CATALOGO.map((categoria) => (
+          {CATALOGO.filter(c => c.categoria === "Extintores" || c.categoria === "Placas de Sinalização")
+            .sort((a, b) => a.categoria === "Extintores" ? -1 : 1)
+            .map((categoria) => (
             <div key={categoria.categoria}>
               <h3 className="font-display text-2xl font-bold text-secondary mb-6 flex items-center gap-3">
                 {categoria.categoria}
