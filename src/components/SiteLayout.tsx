@@ -1,39 +1,94 @@
 import { Link, Outlet } from "@tanstack/react-router";
-import { Instagram, Phone, MapPin } from "lucide-react";
+import { Instagram, Phone, MapPin, Menu, X } from "lucide-react";
 import logo from "@/assets/logo.png";
+import { useState } from "react";
 
 const WHATSAPP =
   "https://api.whatsapp.com/send?phone=5516999998625&text=Ol%C3%A1!%20Como%20posso%20te%20ajudar%20?";
 const INSTAGRAM = "https://www.instagram.com/extingueextintores/";
 
 export function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const navLinks = [
+    { to: "/", label: "Início", exact: true },
+    { to: "/sobre", label: "Sobre" },
+    { to: "/servicos", label: "Serviços" },
+    { to: "/catalogo", label: "Catálogo" },
+    { to: "/contato", label: "Contato" },
+  ];
+
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border/60 bg-background/80 backdrop-blur-md">
       <div className="container mx-auto flex h-20 items-center justify-between px-4">
-        <Link to="/" className="flex items-center gap-3">
+        {/* LOGO */}
+        <Link to="/" className="flex items-center gap-3" onClick={() => setMenuOpen(false)}>
           <img src={logo} alt="Extingue Extintores" className="h-12 w-auto" />
           <div className="hidden sm:block leading-tight">
             <div className="font-display text-lg font-bold text-secondary">EXTINGUE</div>
-            <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">
-              Extintores
-            </div>
+            <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground">Extintores</div>
           </div>
         </Link>
+
+        {/* NAV DESKTOP */}
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium">
-          <Link to="/" className="text-foreground hover:text-primary transition-colors" activeProps={{ className: "text-primary" }} activeOptions={{ exact: true }}>Início</Link>
-          <Link to="/sobre" className="text-foreground hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Sobre</Link>
-          <Link to="/servicos" className="text-foreground hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Serviços</Link>
-          <Link to="/contato" className="text-foreground hover:text-primary transition-colors" activeProps={{ className: "text-primary" }}>Contato</Link>
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="text-foreground hover:text-primary transition-colors"
+              activeProps={{ className: "text-primary font-semibold" }}
+              activeOptions={link.exact ? { exact: true } : undefined}
+            >
+              {link.label}
+            </Link>
+          ))}
         </nav>
-        <a
-          href={WHATSAPP}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] hover:bg-primary-glow transition-all hover:scale-105"
-        >
-          <Phone className="h-4 w-4" />
-          <span className="hidden sm:inline">Orçamento</span>
-        </a>
+
+        {/* AÇÕES DIREITA */}
+        <div className="flex items-center gap-3">
+          <a
+            href={WHATSAPP}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-[var(--shadow-elegant)] hover:bg-primary-glow transition-all hover:scale-105"
+          >
+            <Phone className="h-4 w-4" />
+            <span className="hidden sm:inline">Orçamento</span>
+          </a>
+
+          {/* BOTÃO HAMBÚRGUER (só mobile) */}
+          <button
+            id="mobile-menu-toggle"
+            className="md:hidden flex items-center justify-center h-10 w-10 rounded-xl text-secondary hover:bg-muted transition-colors"
+            onClick={() => setMenuOpen((prev) => !prev)}
+            aria-label="Abrir menu"
+          >
+            {menuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          </button>
+        </div>
+      </div>
+
+      {/* MENU MOBILE DROPDOWN */}
+      <div
+        className={`md:hidden overflow-hidden transition-all duration-300 ease-in-out ${
+          menuOpen ? "max-h-96 border-t border-border/60" : "max-h-0"
+        } bg-background/95 backdrop-blur-md`}
+      >
+        <nav className="container mx-auto px-4 py-4 flex flex-col gap-1">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              className="text-foreground hover:text-primary hover:bg-muted rounded-xl px-4 py-3 text-base font-medium transition-colors"
+              activeProps={{ className: "text-primary bg-primary/10 font-semibold" }}
+              activeOptions={link.exact ? { exact: true } : undefined}
+              onClick={() => setMenuOpen(false)}
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
       </div>
     </header>
   );
